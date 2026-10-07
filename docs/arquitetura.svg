@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" font-family="'Segoe Print','Comic Sans MS','Bradley Hand',cursive" fill="#14171A">
+  <title>Arquitetura do Grifo</title>
+  <desc>O navegador envia o arquivo para /api/extrair, recebe o texto por página ou aba, e manda pergunta, texto e conversa para /api/perguntar, que consulta a DeepSeek e devolve a resposta validada.</desc>
+  <defs>
+    <filter id="rabisco" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.025" numOctaves="2" seed="4"/>
+      <feDisplacementMap in="SourceGraphic" scale="5"/>
+    </filter>
+    <marker id="seta" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M1 1 L11 6 L1 11" fill="none" stroke="#14171A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="720" fill="#FFFFFF"/>
+
+  <!-- Formas (com traço tremido) -->
+  <g filter="url(#rabisco)" fill="none" stroke="#14171A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="150" y="26" width="92" height="40" rx="6" fill="#FFD92E" stroke="none"/>
+
+    <rect x="30" y="90" width="380" height="600" rx="18" fill="#F3F4F0"/>
+    <rect x="60" y="150" width="320" height="110" rx="12" fill="#FFFFFF"/>
+    <rect x="60" y="300" width="320" height="190" rx="12" fill="#FFFFFF"/>
+    <rect x="60" y="530" width="320" height="130" rx="12" fill="#FFFFFF"/>
+    <path d="M220 490 L220 528" stroke-dasharray="6 6" marker-end="url(#seta)"/>
+
+    <rect x="470" y="90" width="360" height="600" rx="18" fill="#F3F4F0"/>
+    <rect x="495" y="150" width="310" height="190" rx="12" fill="#FFFFFF"/>
+    <rect x="495" y="400" width="310" height="250" rx="12" fill="#FFFFFF"/>
+
+    <rect x="900" y="400" width="270" height="250" rx="18" fill="#FFFFFF" stroke-width="3.5"/>
+
+    <path d="M382 185 L493 185" marker-end="url(#seta)"/>
+    <path d="M493 235 L382 235" marker-end="url(#seta)"/>
+    <path d="M382 420 L493 420" marker-end="url(#seta)"/>
+    <path d="M493 465 L382 465" marker-end="url(#seta)"/>
+    <path d="M807 470 L898 470" marker-end="url(#seta)"/>
+    <path d="M898 560 L807 560" marker-end="url(#seta)"/>
+
+    <g fill="#FFD92E">
+      <circle cx="437" cy="185" r="15"/>
+      <circle cx="437" cy="235" r="15"/>
+      <circle cx="437" cy="420" r="15"/>
+      <circle cx="437" cy="465" r="15"/>
+      <circle cx="852" cy="470" r="15"/>
+      <circle cx="852" cy="560" r="15"/>
+      <circle cx="918" cy="150" r="13"/>
+      <circle cx="918" cy="186" r="13"/>
+      <circle cx="918" cy="222" r="13"/>
+      <circle cx="918" cy="258" r="13"/>
+      <circle cx="918" cy="294" r="13"/>
+      <circle cx="918" cy="330" r="13"/>
+    </g>
+  </g>
+
+  <!-- Textos (sem filtro, para ficarem legíveis) -->
+  <g font-size="30" font-weight="700">
+    <text x="138" y="56" text-anchor="end">Como o</text>
+    <text x="196" y="56" text-anchor="middle">Grifo</text>
+    <text x="254" y="56">funciona</text>
+  </g>
+
+  <g font-size="14" font-weight="700" text-anchor="middle">
+    <text x="437" y="190">1</text>
+    <text x="437" y="240">2</text>
+    <text x="437" y="425">3</text>
+    <text x="437" y="470">6</text>
+    <text x="852" y="475">4</text>
+    <text x="852" y="565">5</text>
+    <text x="918" y="155">1</text>
+    <text x="918" y="191">2</text>
+    <text x="918" y="227">3</text>
+    <text x="918" y="263">4</text>
+    <text x="918" y="299">5</text>
+    <text x="918" y="335">6</text>
+  </g>
+
+  <text x="50" y="126" font-size="19" font-weight="700">Navegador (cliente)</text>
+  <text x="490" y="126" font-size="19" font-weight="700">Servidor Next.js (rotas de API)</text>
+
+  <g font-size="14">
+    <text x="78" y="182" font-size="18" font-weight="700">/  ·  Início</text>
+    <text x="78" y="210" fill="#5A616B">app/page.tsx</text>
+    <text x="78" y="238">escolhe ou arrasta um PDF / Excel</text>
+
+    <text x="78" y="332" font-size="18" font-weight="700">/doc/[id]  ·  Chat</text>
+    <text x="78" y="360" fill="#5A616B">app/doc/[id]/page.tsx</text>
+    <text x="78" y="392">pergunta e resposta com o valor</text>
+    <text x="78" y="414">em destaque e as fontes</text>
+    <text x="78" y="446">painel ao lado: PDF, ou planilha</text>
+    <text x="78" y="468">com a linha citada grifada</text>
+
+    <text x="78" y="562" font-size="18" font-weight="700">Estado</text>
+    <text x="78" y="590" fill="#5A616B">app/shell.tsx</text>
+    <text x="78" y="618">texto + conversas → localStorage</text>
+    <text x="78" y="640">arquivo PDF → só na memória</text>
+
+    <text x="513" y="182" font-size="18" font-weight="700">POST /api/extrair</text>
+    <text x="513" y="210" fill="#5A616B">app/api/extrair/route.ts</text>
+    <text x="513" y="244">PDF → unpdf → texto por página</text>
+    <text x="513" y="270">Excel → SheetJS → texto por aba</text>
+    <text x="513" y="304">recusa: tipo errado, mais de 20 MB,</text>
+    <text x="513" y="326">PDF só de imagem, planilha vazia</text>
+
+    <text x="513" y="432" font-size="18" font-weight="700">POST /api/perguntar</text>
+    <text x="513" y="460" fill="#5A616B">app/api/perguntar/route.ts</text>
+    <text x="513" y="494">monta o prompt: regras + documento</text>
+    <text x="513" y="516">+ conversa + pergunta</text>
+    <text x="513" y="548">corta em 1,2 milhão de caracteres</text>
+    <text x="513" y="580">confere o JSON que a IA devolve</text>
+    <text x="513" y="612">chave da IA: só aqui (.env.local)</text>
+
+    <text x="920" y="436" font-size="20" font-weight="700">DeepSeek (IA)</text>
+    <text x="920" y="464" fill="#5A616B">api.deepseek.com</text>
+    <text x="920" y="498">modelo deepseek-chat</text>
+    <text x="920" y="530">responde em JSON:</text>
+    <text x="920" y="556">texto, destaque,</text>
+    <text x="920" y="578">itens, fontes</text>
+    <text x="920" y="612">fonte = página/aba + trecho</text>
+
+    <text x="900" y="116" font-size="19" font-weight="700">Passo a passo</text>
+    <text x="942" y="155">arquivo enviado (FormData)</text>
+    <text x="942" y="191">volta o texto por página/aba</text>
+    <text x="942" y="227">pergunta + texto + conversa</text>
+    <text x="942" y="263">prompt vai para a IA</text>
+    <text x="942" y="299">IA devolve um JSON</text>
+    <text x="942" y="335">resposta conferida → chat</text>
+  </g>
+</svg>
