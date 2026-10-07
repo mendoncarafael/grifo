@@ -84,6 +84,8 @@ app/
   api/perguntar/route.ts  pergunta → DeepSeek → resposta validada
 lib/
   responder.ts          tipos da resposta e chamada à rota /api/perguntar
+  calculo.ts            contas exatas sobre a planilha (soma, contagem, média...)
+  calculo.test.mjs      verificação das contas: node lib/calculo.test.mjs
 docs/
   arquitetura.svg       desenho acima
 ```
@@ -93,7 +95,7 @@ docs/
 - **PDF digitalizado** (só imagem) é recusado: não há OCR.
 - **Tamanho**: arquivos de até 20 MB. O texto enviado à IA é cortado em 1,2 milhão de caracteres, o que dá por volta de 2.000 linhas de uma planilha larga.
 - **Custo**: o documento inteiro é reenviado a cada pergunta. Documentos grandes consomem muitos tokens.
-- **Contas em planilhas**: quem soma é o modelo de IA. Buscas e contagens funcionam bem; somas de muitas linhas podem sair erradas.
+- **Contas em planilhas**: soma, contagem, média, máximo e mínimo são calculados no servidor (`lib/calculo.ts`); a IA só descreve a conta (aba, coluna, filtros). Isso exige que a primeira linha da aba seja o cabeçalho. Contas mais elaboradas, como comparar duas colunas, ainda ficam por conta do modelo.
 - **Trecho no PDF**: o PDF abre no visualizador do navegador, que não grifa o trecho dentro da página (ele aparece num cartão abaixo). No Chrome do Android o PDF abre em outra aba.
 - **Depois de recarregar a página**: a conversa e as planilhas continuam; o arquivo PDF precisa ser enviado de novo para ser visualizado.
 - **Sem login**: as rotas de API são abertas. Antes de publicar na internet, proteja-as para ninguém gastar a sua chave.

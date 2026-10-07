@@ -26,15 +26,15 @@ const normalizar = (s: string) => s.replace(/\s+/g, " ").trim().toLowerCase();
 
 // ponytail: grifa a linha inteira cujo texto contém o trecho citado (ou está contido nele);
 // se a IA parafrasear em vez de copiar, nada é grifado. Pedir linha/coluna à IA se precisar de exatidão.
-function Planilha({ texto, trecho }: { texto: string; trecho?: string }) {
-  const alvo = trecho ? normalizar(trecho) : "";
+function Planilha({ texto, trechos }: { texto: string; trechos: string[] }) {
+  const alvos = trechos.map(normalizar).filter(Boolean);
   return (
     <div className="planilha">
       <table>
         <tbody>
           {texto.split("\n").map((linha, i) => {
             const l = normalizar(linha);
-            const grifada = alvo && l && (l.includes(alvo) || (l.length > 8 && alvo.includes(l)));
+            const grifada = l && alvos.some((alvo) => l.includes(alvo) || (l.length > 8 && alvo.includes(l)));
             return (
               <tr key={i} className={grifada ? "grifada" : undefined}>
                 {linha.split("\t").map((celula, j) => (
@@ -54,7 +54,8 @@ export default function Doc() {
   const { docs, carregado, pendente, perguntar, remover, urlDe } = useGrifo();
   const router = useRouter();
   const doc = docs.find((d) => d.id === id);
-  const [fonte, setFonte] = useState<Fonte | null>(null);
+  // Fontes escolhidas no chat: de qual resposta, em qual página/aba, e os trechos citados nela.
+  const [sel, setSel] = useState<{ msg: number; pagina: number; trechos: string[] } | null>(null);
   const [pagina, setPagina] = useState(1);
   const [pdfAberto, setPdfAberto] = useState(false);
   const fim = useRef<HTMLDivElement>(null);
@@ -165,8 +166,8 @@ export default function Doc() {
                 {m.destaque && <div className="destaque"><span className="grifo">{m.destaque}</span></div>}
                 {m.itens && (
                   <dl className="itens">
-                    {m.itens.map((item) => (
-                      <div key={item.rotulo}>
+                    {m.itens.map((item, j) => (
+                      <div key={j}>
                         <dt>{item.rotulo}</dt>
                         <dd>{item.valor}</dd>
                       </div>
@@ -176,18 +177,19 @@ export default function Doc() {
                 {m.fontes && (
                   <div className="chips fontes">
                     <span className="suave">Encontrado em</span>
-                    {m.fontes.map((f) => (
+                    {/* Um botão por página/aba, mesmo que a resposta cite vários trechos dela. */}
+                    {[...new Set(m.fontes.map((f: Fonte) => f.pagina))].map((p) => (
                       <button
-                        key={f.pagina + f.trecho}
+                        key={p}
                         className="chip"
-                        aria-pressed={f === fonte}
+                        aria-pressed={sel?.msg === i && sel.pagina === p}
                         onClick={() => {
-                          setFonte(f);
-                          setPagina(f.pagina);
+                          setSel({ msg: i, pagina: p, trechos: m.fontes!.filter((f) => f.pagina === p).map((f) => f.trecho) });
+                          setPagina(p);
                           setPdfAberto(true);
                         }}
                       >
-                        {rotulo(doc, f.pagina)}
+                        {rotulo(doc, p)}
                       </button>
                     ))}
                   </div>
@@ -231,7 +233,7 @@ export default function Doc() {
           )}
         </div>
         {doc.abas ? (
-          <Planilha texto={doc.paginas?.[pagina - 1] ?? ""} trecho={fonte?.pagina === pagina ? fonte.trecho : undefined} />
+          <Planilha texto={doc.paginas?.[pagina - 1] ?? ""} trechos={sel?.pagina === pagina ? sel.trechos : []} />
         ) : url ? (
           // ponytail: visualizador nativo do navegador — não grifa o trecho dentro da
           // página e não abre embutido no Chrome do Android (daí o link abaixo).
@@ -243,10 +245,12 @@ export default function Doc() {
         ) : (
           <p className="aviso">O arquivo não fica salvo ao recarregar a página. Envie o PDF de novo para visualizá-lo.</p>
         )}
-        {fonte && (
+        {sel && (
           <div className="trecho">
-            <h2 className="rotulo">Trecho usado na resposta</h2>
-            <blockquote>“<span className="grifo">{fonte.trecho}</span>”</blockquote>
+            <h2 className="rotulo">{sel.trechos.length > 1 ? "Trechos usados na resposta" : "Trecho usado na resposta"}</h2>
+            {sel.trechos.map((t, i) => (
+              <blockquote key={i}>“<span className="grifo">{t}</span>”</blockquote>
+            ))}
           </div>
         )}
       </aside>

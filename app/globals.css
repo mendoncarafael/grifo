@@ -135,7 +135,7 @@ textarea {
 .planilha table { border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
 .planilha td { padding: 8px 12px; border: 1px solid var(--linha); white-space: nowrap; }
 .planilha tr.grifada td { background: var(--grifo); font-weight: 600; }
-.trecho { flex: none; display: flex; flex-direction: column; gap: 12px; padding: 20px; background: #fff; border-top: 1px solid var(--linha); }
+.trecho { flex: none; max-height: 40%; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding: 20px; background: #fff; border-top: 1px solid var(--linha); }
 .trecho blockquote { font-family: var(--fonte-titulo), sans-serif; font-weight: 500; font-size: 22px; line-height: 1.35; letter-spacing: -0.4px; }
 
 @media (min-width: 900px) {

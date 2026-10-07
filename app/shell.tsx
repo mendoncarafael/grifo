@@ -105,10 +105,13 @@ export function Shell({ children }: { children: React.ReactNode }) {
       try {
         const paginas = doc?.paginas;
         if (!paginas) throw new Error("Este documento foi enviado antes de a IA existir. Envie o arquivo de novo.");
-        const historico = doc.mensagens.slice(-10).map((m) => ({
-          role: m.autor === "usuario" ? ("user" as const) : ("assistant" as const),
-          content: [m.texto, m.destaque].filter(Boolean).join(" "),
-        }));
+        // As respostas anteriores voltam como JSON completo, no formato que o modelo deve produzir:
+        // se voltassem como texto solto, ele passava a imitar esse formato e parava de mandar destaque e fontes.
+        const historico = doc.mensagens.slice(-10).map(({ autor, ...resposta }) =>
+          autor === "usuario"
+            ? { role: "user" as const, content: resposta.texto }
+            : { role: "assistant" as const, content: JSON.stringify(resposta) },
+        );
         acrescentar(id, { autor: "grifo", ...(await responder({ paginas, abas: doc.abas }, historico, texto)) });
       } catch (e) {
         const mensagem = e instanceof Error && e.message ? e.message : "Não consegui responder agora. Tente de novo.";
